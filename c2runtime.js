@@ -20550,6 +20550,86 @@ cr.plugins_.cranberrygame_CordovaInAppBrowser = function(runtime)
 	};
 	pluginProto.exps = new Exps();
 }());
+;
+;
+cr.behaviors.Rotate = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var behaviorProto = cr.behaviors.Rotate.prototype;
+	behaviorProto.Type = function(behavior, objtype)
+	{
+		this.behavior = behavior;
+		this.objtype = objtype;
+		this.runtime = behavior.runtime;
+	};
+	var behtypeProto = behaviorProto.Type.prototype;
+	behtypeProto.onCreate = function()
+	{
+	};
+	behaviorProto.Instance = function(type, inst)
+	{
+		this.type = type;
+		this.behavior = type.behavior;
+		this.inst = inst;				// associated object instance to modify
+		this.runtime = type.runtime;
+	};
+	var behinstProto = behaviorProto.Instance.prototype;
+	behinstProto.onCreate = function()
+	{
+		this.speed = cr.to_radians(this.properties[0]);
+		this.acc = cr.to_radians(this.properties[1]);
+	};
+	behinstProto.saveToJSON = function ()
+	{
+		return {
+			"speed": this.speed,
+			"acc": this.acc
+		};
+	};
+	behinstProto.loadFromJSON = function (o)
+	{
+		this.speed = o["speed"];
+		this.acc = o["acc"];
+	};
+	behinstProto.tick = function ()
+	{
+		var dt = this.runtime.getDt(this.inst);
+		if (dt === 0)
+			return;
+		if (this.acc !== 0)
+			this.speed += this.acc * dt;
+		if (this.speed !== 0)
+		{
+			this.inst.angle = cr.clamp_angle(this.inst.angle + this.speed * dt);
+			this.inst.set_bbox_changed();
+		}
+	};
+	function Cnds() {};
+	behaviorProto.cnds = new Cnds();
+	function Acts() {};
+	Acts.prototype.SetSpeed = function (s)
+	{
+		this.speed = cr.to_radians(s);
+	};
+	Acts.prototype.SetAcceleration = function (a)
+	{
+		this.acc = cr.to_radians(a);
+	};
+	behaviorProto.acts = new Acts();
+	function Exps() {};
+	Exps.prototype.Speed = function (ret)
+	{
+		ret.set_float(cr.to_degrees(this.speed));
+	};
+	Exps.prototype.Acceleration = function (ret)
+	{
+		ret.set_float(cr.to_degrees(this.acc));
+	};
+	behaviorProto.exps = new Exps();
+}());
 cr.getObjectRefTable = function () { return [
 	cr.plugins_.Browser,
 	cr.plugins_.Rex_FirebaseAPIV3,
@@ -20558,21 +20638,17 @@ cr.getObjectRefTable = function () { return [
 	cr.plugins_.Sprite,
 	cr.plugins_.Touch,
 	cr.plugins_.cranberrygame_CordovaInAppBrowser,
+	cr.behaviors.Rotate,
 	cr.system_object.prototype.cnds.OnLayoutStart,
 	cr.plugins_.Touch.prototype.cnds.OnTouchObject,
 	cr.plugins_.Rex_Firebase_Authentication.prototype.acts.ProviderAuthentication_Login,
 	cr.plugins_.Text.prototype.acts.AppendText,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.acts.LoggingOut,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.cnds.OnLoggedOut,
-	cr.plugins_.Browser.prototype.acts.ConsoleLog,
-	cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.cnds.OnLoggedOutByOther,
 	cr.plugins_.Rex_Firebase_Authentication.prototype.cnds.OnLoginSuccessful,
 	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.DisplayName,
 	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.UserID,
+	cr.plugins_.Browser.prototype.acts.ConsoleLog,
+	cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
 	cr.plugins_.Sprite.prototype.acts.LoadURL,
 	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.UserIDFromProvider,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.AccessToken,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.cnds.OnLoginByOther,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.PhotoURL
+	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.AccessToken
 ];};
