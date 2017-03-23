@@ -29,7 +29,6 @@
 	<access origin="*" />
 
 	<plugin name="cordova-plugin-inappbrowser" source="npm" />
-	<plugin name="https://github.com/cranberrygame/cordova-plugin-share-facebook --variable APP_ID='YOUR_FACEBOOK_APP_ID' --variable APP_NAME='YOUR_FACEBOOK_APP_NAME'" source="npm" />
 
 	<!-- Optional splash screen image, e.g.: -->
 	<!-- <gap:splash src="splash.png" width="1024" height="768" /> -->
