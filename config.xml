@@ -29,7 +29,7 @@
 	<access origin="*" />
 
 	<plugin name="cordova-plugin-inappbrowser" source="npm" />
-	<plugin name="https://github.com/cranberrygame/cordova-plugin-share-facebook --variable APP_ID='1678767109016625' --variable APP_NAME='Test'" source="npm" />
+	<plugin name="https://github.com/cranberrygame/cordova-plugin-share-facebook --variable APP_ID="1678767109016625" --variable APP_NAME="Test" source="npm" />
 
 	<!-- Optional splash screen image, e.g.: -->
 	<!-- <gap:splash src="splash.png" width="1024" height="768" /> -->
