@@ -15957,6 +15957,246 @@ cr.plugins_.Browser = function(runtime)
 }());
 ;
 ;
+cr.plugins_.CordovaFaceCon = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.CordovaFaceCon.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+	var self;
+	var connStat="";
+	var currUserID="";
+	var currAccessToken="";
+	var lastError="";
+	var graphApiObject="";
+	typeProto.onCreate = function()
+	{
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	instanceProto.onCreate = function()
+	{
+		self=this;
+	};
+	function onLoginSuccess(data){
+		currUserID=data.authResponse.userID;
+		currAccessToken=data.authResponse.accessToken;
+		connStat=data.status;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onLoginSucc, self);
+	};
+	function onLoginFails(data){
+		lastError=data;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onLoginFail, self);
+	};
+	function onLogoutSuccess(){
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onLogoutSucc, self);
+	};
+	function onLogoutFails(data){
+		lastError=data;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onLogoutFail, self);
+	};
+	function onGetConnStatusSuccess(data){
+		currUserID=data.authResponse.userID;
+		currAccessToken=data.authResponse.accessToken;
+		connStat=data.status;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onGetLogStatSucc, self);
+	};
+	function onGetConnStatusFails(data){
+		lastError=data;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onGetLogStatFail, self);
+	};
+	function onShowDialogSuccess(){
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onShareDialogSucc, self);
+	};
+	function onShowDialogFails(data){
+		lastError=data;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onShareDialogFail, self);
+	};
+	function onAppRequestSuccess(){
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onAppRequestSucc, self);
+	};
+	function onAppRequestFails(data){
+		lastError=data;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onAppRequestFail, self);
+	};
+	function onSendDialogSuccess(){
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onSendDialogSucc, self);
+	};
+	function onSendDialogFails(data){
+		lastError=data;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onSendDialogFail, self);
+	};
+	function onGraphApiSuccess(data){
+		graphApiObject=JSON.stringify(data);
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onGraphApiSucc, self);
+	};
+	function onGraphApiFails(data){
+		lastError=data;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onGraphApiFail, self);
+	};
+	function onAppInviteSuccess(){
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onAppInviteSucc, self);
+	};
+	function onAppInviteFails(data){
+		lastError=data;
+	self.runtime.trigger(cr.plugins_.CordovaFaceCon.prototype.cnds.onAppInviteFail, self);
+	};
+	function Cnds() {};
+	Cnds.prototype.onLoginSucc = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onLoginFail = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onLogoutSucc = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onLogoutFail = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onGetLogStatSucc = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onGetLogStatFail = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onShareDialogSucc = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onShareDialogFail = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onAppRequestSucc = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onAppRequestFail = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onSendDialogSucc = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onSendDialogFail = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onGraphApiSucc = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onGraphApiFail = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onAppInviteSucc = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.onAppInviteFail = function ()
+	{
+		return true;
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+	Acts.prototype.login = function (permissions)
+	{
+		if (typeof window['facebookConnectPlugin'] == 'undefined') {return;}else{
+		window.facebookConnectPlugin.login(permissions.split(","), onLoginSuccess, onLoginFails);
+		}
+	}
+	Acts.prototype.logout = function ()
+	{
+		if (typeof window['facebookConnectPlugin'] == 'undefined') {return;}else{
+		window.facebookConnectPlugin.logout(onLogoutSuccess, onLogoutFails);
+		}
+	}
+	Acts.prototype.getLoginStatus = function ()
+	{
+		if (typeof window['facebookConnectPlugin'] == 'undefined') {return;}else{
+		window.facebookConnectPlugin.getLoginStatus(onGetConnStatusSuccess, onGetConnStatusFails);
+		}
+	}
+	Acts.prototype.shareDialog = function (url1, caption1, name1, message1, description1, picture1)
+	{
+		if (typeof window['facebookConnectPlugin'] == 'undefined') {return;}else{
+		var options= {method:"share",href: url1, caption: caption1, name: name1, message: message1, description: description1, picture: picture1};
+		window.facebookConnectPlugin.showDialog(options, onShowDialogSuccess, onShowDialogFails);
+		}
+	}
+	Acts.prototype.appRequest = function (title1, message1, data1)
+	{
+		if (typeof window['facebookConnectPlugin'] == 'undefined') {return;}else{
+		var options= {method:"apprequests", message: message1, data: data1, title: title1, actionType: "askfor", filters: "app_non_users"};
+		window.facebookConnectPlugin.showDialog(options, onAppRequestSuccess, onAppRequestFails);
+		}
+	}
+	Acts.prototype.sendDialog = function (url1, caption1, name1, message1, description1, picture1)
+	{
+		if (typeof window['facebookConnectPlugin'] == 'undefined') {return;}else{
+		var options= {method:"send",href: url1, caption: caption1, name: name1, message: message1, description: description1, picture: picture1};
+		window.facebookConnectPlugin.showDialog(options, onSendDialogSuccess, onSendDialogFails);
+		}
+	}
+	Acts.prototype.useGraphApi = function (path, permissions)
+	{
+		if (typeof window['facebookConnectPlugin'] == 'undefined') {return;}else{
+		window.facebookConnectPlugin.api(path, permissions.split(","),onGraphApiSuccess, onGraphApiFails);
+		}
+	}
+	Acts.prototype.appInvite = function (url1, picture1)
+	{
+		if (typeof window['facebookConnectPlugin'] == 'undefined') {return;}else{
+		var options= {url:url1, picture: picture1};
+		window.facebookConnectPlugin.appInvite(options, onAppInviteFails, onAppInviteSuccess);
+		}
+	}
+	pluginProto.acts = new Acts();
+	function Exps() {};
+	Exps.prototype.getConnStatus = function (ret)
+	{
+		ret.set_string(connStat);
+	};
+	Exps.prototype.getAccessToken = function (ret)
+	{
+		ret.set_string(currAccessToken);
+	};
+	Exps.prototype.getUserId = function (ret)
+	{
+		ret.set_string(currUserID);
+	};
+	Exps.prototype.getLastError = function (ret)
+	{
+		ret.set_string(lastError);
+	};
+	Exps.prototype.getGraphApiReturn = function (ret)
+	{
+		ret.set_string(graphApiObject);
+	};
+	pluginProto.exps = new Exps();
+}());
+;
+;
 cr.plugins_.Sprite = function(runtime)
 {
 	this.runtime = runtime;
@@ -19006,1468 +19246,6 @@ cr.plugins_.Touch = function(runtime)
 }());
 ;
 ;
-/*
-cr.plugins_.cranberrygame_CordovaFacebook = function(runtime)
-{
-	this.runtime = runtime;
-	Type
-		onCreate
-	Instance
-		onCreate
-		draw
-		drawGL
-	cnds
-	acts
-	exps
-};
-*/
-cr.plugins_.cranberrygame_CordovaFacebook = function(runtime)
-{
-	this.runtime = runtime;
-};
-(function ()
-{
-	var pluginProto = cr.plugins_.cranberrygame_CordovaFacebook.prototype;
-	pluginProto.Type = function(plugin)
-	{
-		this.plugin = plugin;
-		this.runtime = plugin.runtime;
-	};
-	var typeProto = pluginProto.Type.prototype;
-/*
-	var fbAppID = "";
-*/
-	var appId = "";
-	var appName = "";
-	var appSecret = "";
-	var isLogined = false;
-	var userId = "";
-	var fullName = "";
-	var firstName = "";
-	var lastName = "";
-	var gender = "";
-	var email = "";
-	var accessToken = "";
-	var highScore = 0;
-	var errorMessage = "";
-	var curTag = "";
-	var isShowingLeaderboard = false;
-	typeProto.onCreate = function()
-	{
-/*
-		var newScriptTag=document.createElement('script');
-		newScriptTag.setAttribute("type","text/javascript");
-		newScriptTag.setAttribute("src", "mylib.js");
-		document.getElementsByTagName("head")[0].appendChild(newScriptTag);
-		var scripts=document.getElementsByTagName("script");
-		var scriptExist=false;
-		for(var i=0;i<scripts.length;i++){
-			if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
-				scriptExist=true;
-				break;
-			}
-		}
-		if(!scriptExist){
-			var newScriptTag=document.createElement("script");
-			newScriptTag.setAttribute("type","text/javascript");
-			newScriptTag.setAttribute("src", "cordova.js");
-			document.getElementsByTagName("head")[0].appendChild(newScriptTag);
-		}
-*/
-		if(this.runtime.isBlackberry10 || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81){
-			var scripts=document.getElementsByTagName("script");
-			var scriptExist=false;
-			for(var i=0;i<scripts.length;i++){
-				if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
-					scriptExist=true;
-					break;
-				}
-			}
-			if(!scriptExist){
-				var newScriptTag=document.createElement("script");
-				newScriptTag.setAttribute("type","text/javascript");
-				newScriptTag.setAttribute("src", "cordova.js");
-				document.getElementsByTagName("head")[0].appendChild(newScriptTag);
-			}
-		}
-	};
-	pluginProto.Instance = function(type)
-	{
-		this.type = type;
-		this.runtime = type.runtime;
-	};
-	var instanceProto = pluginProto.Instance.prototype;
-	instanceProto.onCreate = function()
-	{
-/*
-		var self=this;
-		window.addEventListener("resize", function () {//cranberrygame
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.TriggerCondition, self);
-		});
-*/
-		appId = this.properties[0];
-		appName = this.properties[1];
-		appSecret = this.properties[2];
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			var self = this;
-		}
-		else {
-			window.fbAsyncInit = function() {
-				var channelfile = '//' + location.hostname;
-				var pname = location.pathname;
-				if (pname.substr(pname.length - 1) !== '/')
-					pname = pname.substr(0, pname.lastIndexOf('/') + 1);
-				FB.init({
-				  "appId"      : appId,
-				  "channelURL" : '//' + location.hostname + pname + 'channel.html',
-				  "status"     : true,
-				  "cookie"     : true,
-				  "oauth"      : true,
-				  "xfbml"      : false
-				});
-				FB.Event.subscribe('auth.login', function(response) {
-					userId = result["authResponse"]["userID"];
-					accessToken = result["authResponse"]["accessToken"];
-					isLogined = true;
-					FB.api('/me', function(response) {
-						userId = result["id"];
-						fullName = result["name"];
-						firstName = result["first_name"];
-						lastName = result["last_name"];
-						gender = result["gender"];
-						email = result["email"];
-						self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLoginSucceeded, self);
-					});
-				});
-				FB.Event.subscribe('auth.logout', function(result) {
-					isLogined = false;
-					fullName = "";
-					firstName = "";
-					lastName = "";
-					gender = "";
-					email = "";
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLogoutSucceeded, self);
-				});
-			};
-			if (appId.length)
-			{
-				(function(d){
-					var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-					js = d.createElement('script'); js.id = id; js.async = true;
-					js.src = "//connect.facebook.net/en_US/all.js";
-					d.getElementsByTagName('head')[0].appendChild(js);
-				}(document));
-			}
-			else
-;
-		}
-		var html = "<div id='leaderboard'></div>";
-		$("body").append(html);
-	};
-	instanceProto.draw = function(ctx)
-	{
-	};
-	instanceProto.drawGL = function (glw)
-	{
-	};
-/*
-	instanceProto.at = function (x)
-	{
-		return this.arr[x];
-	};
-	instanceProto.set = function (x, val)
-	{
-		this.arr[x] = val;
-	};
-*/
-	function Cnds() {};
-/*
-	Cnds.prototype.MyCondition = function (myparam)
-	{
-		return myparam >= 0;
-	};
-	Cnds.prototype.TriggerCondition = function ()
-	{
-		return true;
-	};
-*/
-	Cnds.prototype.OnLoginSucceeded = function (tag)
-	{
-		return cr.equals_nocase(tag, curTag);
-	};
-	Cnds.prototype.OnLoginFailed = function (tag)
-	{
-		return cr.equals_nocase(tag, curTag);
-	};
-	Cnds.prototype.OnLogoutSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnLogoutFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.IsLogined = function ()
-	{
-		return isLogined;
-	};
-	Cnds.prototype.OnCheckPermissionsSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnCheckPermissionsFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnRequestPermissionsSucceeded = function (tag)
-	{
-		return cr.equals_nocase(tag, curTag);
-	};
-	Cnds.prototype.OnRequestPermissionsFailed = function (tag)
-	{
-		return cr.equals_nocase(tag, curTag);
-	};
-	Cnds.prototype.OnPromptWallPostSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPromptWallPostFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPromptWallPostLinkThisAppSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPromptWallPostLinkThisAppFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPromptWallPostLinkSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPromptWallPostLinkFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPublishWallPostSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPublishWallPostFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPublishWallPostLinkSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPublishWallPostLinkFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPublishWallPostLinkThisAppSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPublishWallPostLinkThisAppFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPublishScoreSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnPublishScoreFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.IsShowingLeaderboard = function ()
-	{
-		return isShowingLeaderboard;
-	};
-	Cnds.prototype.OnRequestHighScoreSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnRequestHighScoreFailed = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnInviteSucceeded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnInviteFailed = function ()
-	{
-		return true;
-	};
-	pluginProto.cnds = new Cnds();
-	function Acts() {};
-/*
-	Acts.prototype.MyAction = function (myparam)
-	{
-		alert(myparam);
-	};
-	Acts.prototype.TriggerAction = function ()
-	{
-		var self = this;
-		self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.TriggerCondition, self);
-	};
-*/
-	Acts.prototype.Login = function (permissions, tag) //gizmodude4 - changed parameter to string
-	{
-		if (isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			if (!window['cordova']) {
-				facebookConnectPlugin['browserInit'](appId);
-			}
-			facebookConnectPlugin['login']( permissions.split(','), //cranberrygame
-				function (result) {
-/*
-{
-"authResponse":
-{
-"accessToken": "CAATupo....ZDZD",
-"userID": "1599038253641111",
-"expiresIn": 6420,
-"signedResult": "WeAZ9...3ln0"
-},
-"status": "connected"
-}
-*/
-					userId = result["authResponse"]["userID"];
-					accessToken = result["authResponse"]["accessToken"];
-					isLogined = true;
-					facebookConnectPlugin['api']('/me', [],
-						function (result) {
-/*
-{
-"id": "1404109319901111",
-"first_name": "Suji",
-"timezone": 9,
-"email": "xxxx@xxx.com",
-"verified": false,
-"name": "Suji Kang",
-"locale": "ko_KR",
-"link": "https://www.facebook.com/app_scoped_user_id/1404109319901111/",
-"last_name": "Kang",
-"gender": "female",
-"updated_time": "2015-03-19T05:13:30+000"
-}
-*/
-							userId = result["id"];
-							fullName = result["name"];
-							firstName = result["first_name"];
-							lastName = result["last_name"];
-							gender = result["gender"];
-							email = result["email"];
-							curTag = tag;
-							self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLoginSucceeded, self);
-						},
-						function (error) {
-							if (typeof error == "string")
-								errorMessage = error;
-							else if (error["errorMessage"])
-								errorMessage = error["errorMessage"];
-							else
-								errorMessage = JSON.stringify(error);
-							curTag = tag;
-							self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLoginSucceeded, self);
-						}
-					);
-				},
-				function (error) {
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					curTag = tag;
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLoginFailed, self);
-				}
-			);
-		}
-		else {
-			FB.login(function(result) {
-/*
-{
-"authResponse":
-{
-"accessToken": "CAATupo....ZDZD",
-"userID": "1599038253641111",
-"expiresIn": 6420,
-"signedResult": "WeAZ9...3ln0"
-},
-"status": "connected"
-}
-*/
-				userId = result["authResponse"]["userID"];
-				accessToken = result["authResponse"]["accessToken"];
-				isLogined = true;
-				FB.api('/me', function(result) {
-/*
-{
-"id": "1404109319901111",
-"first_name": "Suji",
-"timezone": 9,
-"email": "xxxx@xxx.com",
-"verified": false,
-"name": "Suji Kang",
-"locale": "ko_KR",
-"link": "https://www.facebook.com/app_scoped_user_id/1404109319901111/",
-"last_name": "Kang",
-"gender": "female",
-"updated_time": "2015-03-19T05:13:30+000"
-}
-*/
-						userId = result["id"];
-						fullName = result["name"];
-						firstName = result["first_name"];
-						lastName = result["last_name"];
-						gender = result["gender"];
-						email = result["email"];
-						curTag = tag;
-						self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLoginSucceeded, self);
-					}
-/*
-					,
-					function (error) {
-						if (typeof error == "string")
-							errorMessage = error;
-						else if (error["errorMessage"])
-							errorMessage = error["errorMessage"];
-						else
-							errorMessage = JSON.stringify(error);
-						curTag = tag;
-						self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLoginSucceeded, self);
-					}
-*/
-				);
-			}, {scope: permissions});
-		}
-	};
-	Acts.prototype.Logout = function ()
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['logout'](
-				function (result) {
-					isLogined = false;
-					fullName = "";
-					firstName = "";
-					lastName = "";
-					gender = "";
-					email = "";
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLogoutSucceeded, self);
-				},
-				function (error) {
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLogoutFailed, self);
-				}
-			);
-		}
-		else {
-			FB.logout(function(response) {
-			});
-		}
-	};
-	Acts.prototype.CheckPermissions = function (permissions)
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['api']('/me/permissions', [],
-				function(result) {
-/*
-{"data":[
-{"status":"granted", "permission":"user_friends"},
-{"status":"granted", "permission":"email"},
-{"status":"granted", "permission":"publish_actions"},
-{"status":"granted", "permission":"publish_profile"}
-]}
-*/
-					var arrCheckPermissions = permissions.split(',');
-					var resultSuccess = true;
-					for (var i = 0; i < arrCheckPermissions.length; i++) {
-						var checkPermission = arrCheckPermissions[i].trim();
-						var arrPermissions = result['data'];
-						var exist = false;
-						for (var j = 0; j < arrPermissions.length; j++) {
-							if (arrPermissions[j]["status"] == "granted" && arrPermissions[j]["permission"] == checkPermission)
-								exist = true;
-						}
-						if (!exist) {
-							resultSuccess = false;
-							break;
-						}
-					}
-					if (resultSuccess) {
-						self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnCheckPermissionsSucceeded, self);
-					}
-					else {
-						self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnCheckPermissionsFailed, self);
-					}
-				},
-				function(error) {
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnCheckPermissionsFailed, self);
-				}
-			);
-		}
-		else {
-		}
-	};
-	Acts.prototype.RequestPermissions = function (permissions, tag)
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['login']( permissions.split(','), //cranberrygame
-				function (result) {
-					accessToken = result["authResponse"]["accessToken"];
-					curTag = tag;
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnRequestPermissionsSucceeded, self);
-				},
-				function (error) {
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					curTag = tag;
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnRequestPermissionsFailed, self);
-				}
-			);
-		}
-		else {
-		}
-	}
-	Acts.prototype.PromptWallPost = function ()
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['showDialog']( { 'method': "feed" },
-				function (result) {
-					console.log(JSON.stringify(result))
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPromptWallPostSucceeded, self);
-				},
-				function (error) {
-					onsole.log(JSON.stringify(error))
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPromptWallPostFailed, self);
-				}
-			);
-		}
-		else {
-			FB.ui({ "method": "feed" }, function(result) {
-			});
-		}
-	};
-	Acts.prototype.PromptWallPostLink = function (url_, name_, description_, caption_, picture_)
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['showDialog']({
-				"method": "feed",
-				"link": url_,
-				"name": name_,
-				"description": description_,
-				"caption": caption_,
-				"picture": picture_
-				},
-				function(result) {
-					console.log(JSON.stringify(result));
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPromptWallPostLinkSucceeded, self);
-				},
-				function(error){
-					console.log(JSON.stringify(error));
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPromptWallPostLinkFailed, self);
-				}
-			);
-		}
-		else {
-			FB.ui({
-				"method": "feed",
-				"link": url_,
-				"picture": picture_,
-				"name": name_,
-				"caption": caption_,
-				"description": description_
-			},
-			function(result) {
-			});
-		}
-	};
-	Acts.prototype.PromptWallPostLinkThisApp = function (name_, description_, caption_, picture_)
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['showDialog']({
-				"method": "feed",
-				"link": "http://apps.facebook.com/" + appId + "/",
-				"name": name_,
-				"description": description_,
-				"caption": caption_,
-				"picture": picture_
-				},
-				function(result) {
-					console.log(JSON.stringify(result));
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPromptWallPostLinkThisAppSucceeded, self);
-				},
-				function(error){
-					console.log(JSON.stringify(error));
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPromptWallPostLinkThisAppFailed, self);
-				}
-			);
-		}
-		else {
-			FB.ui({
-				"method": "feed",
-				"link": "http://apps.facebook.com/" + appId + "/",
-				"picture": picture_,
-				"name": name_,
-				"caption": caption_,
-				"description": description_
-			},
-			function(result) {
-			});
-		}
-	};
-	Acts.prototype.PublishWallPost = function (message_)
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			var serialize = function(obj) {
-			  var str = [];
-			  for(var p in obj)
-				if (obj.hasOwnProperty(p)) {
-				  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-				}
-			  return str.join("&");
-			}
-			var publish = {
-				"message": message_
-			};
-			facebookConnectPlugin['api']('/me/feed?method=post&' + serialize(publish), ['publish_actions'],
-				function (result) {
-					console.log(JSON.stringify(result));
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishWallPostSucceeded, self);
-				},
-				function (error) {
-					console.log(JSON.stringify(error));
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishWallPostFailed, self);
-				}
-			);
-		}
-		else {
-			var publish = {
-				"method": 'stream.publish',
-				"message": message_
-			};
-			FB.api('/me/feed', 'POST', publish, function(result) {
-			});
-		}
-	};
-	Acts.prototype.PublishWallPostLink = function (message_, url_, name_, description_, caption_, picture_)
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			var serialize = function(obj) {
-			  var str = [];
-			  for(var p in obj)
-				if (obj.hasOwnProperty(p)) {
-				  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-				}
-			  return str.join("&");
-			}
-			var publish = {
-				"message": message_,
-				"link": url_,
-				"name": name_,
-				"description": description_,
-				"caption": caption_
-			};
-			if (picture_.length)
-				publish["picture"] = picture_;
-/*
-			var publish = {};
-			if (message_)
-				publish["message"] = message_;
-			if (url_)
-				publish["link"] = url_;
-			if (name_)
-				publish["name"] = name_;
-			if (description_)
-				publish["description"] = description_;
-			if (caption_)
-				publish["caption"] = caption_;
-			if (picture_)
-				publish["picture"] = picture_;
-*/
-			facebookConnectPlugin['api']('/me/feed?method=post&' + serialize(publish), ['publish_actions'],
-				function (result) {
-					console.log(JSON.stringify(result));
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishWallPostLinkSucceeded, self);
-				},
-				function (error) {
-					console.log(JSON.stringify(error));
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishWallPostLinkFailed, self);
-				}
-			);
-		}
-		else {
-			var publish = {
-					"method": 'stream.publish',
-					"message": message_,
-					"link": url_,
-					"name": name_,
-					"caption": caption_,
-					"description": description_
-				};
-			if (picture_.length)
-				publish["picture"] = picture_;
-			FB.api('/me/feed', 'POST', publish, function(result) {
-			});
-		}
-	};
-	Acts.prototype.PublishWallPostLinkThisApp = function (message_, name_, description_, caption_, picture_)
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			var serialize = function(obj) {
-			  var str = [];
-			  for(var p in obj)
-				if (obj.hasOwnProperty(p)) {
-				  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-				}
-			  return str.join("&");
-			}
-			var publish = {
-				"message": message_,
-				"link": "http://apps.facebook.com/" + appId + "/",
-				"name": name_,
-				"description": description_,
-				"caption": caption_
-			};
-			if (picture_.length)
-				publish["picture"] = picture_;
-			facebookConnectPlugin['api']('/me/feed?method=post&' + serialize(publish), ['publish_actions'],
-				function (result) {
-					console.log(JSON.stringify(result));
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishWallPostLinkThisAppSucceeded, self);
-				},
-				function (error) {
-					console.log(JSON.stringify(error));
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishWallPostLinkThisAppFailed, self);
-				}
-			);
-		}
-		else {
-		}
-	};
-	Acts.prototype.PublishScore = function (score_)
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			var serialize = function(obj) {
-			  var str = [];
-			  for(var p in obj)
-				if (obj.hasOwnProperty(p)) {
-				  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-				}
-			  return str.join("&");
-			}
-			var publish = {
-				"score": Math.floor(score_)
-			};
-			facebookConnectPlugin['api']('/me/scores?method=post&' + serialize(publish), ['publish_actions'],
-				function (result) {
-					console.log(JSON.stringify(result));
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishScoreSucceeded, self);
-				},
-				function (error) {
-					console.log(JSON.stringify(error));
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishScoreFailed, self);
-				}
-			);
-		}
-		else {
-			FB.api('/' + userId + '/scores', 'POST', { "score": Math.floor(score_), "access_token": appId + "|" + appSecret }, function(result) {
-				self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnPublishScoreSucceeded, self);
-		    });
-		}
-	};
-function leaderboard_html(ranks, names, scores) {
-	var html = "<div class='modal-overlay' id='modal_window' aria-hidden='true' role='dialog' aria-labelledby='modal_title'>";
-	html += "<div class='modal-content' id='modal_holder' role='document'>";
-	html += "<button class='btn-close' id='modal_close' type='button' aria-label='close'>";
-	html += "  &times;";
-	html += "</button>";
-	html += "<h3 id='modal_title'>Facebook Leaderboard</h3>";
-	html += "<table>";
-	html += "<!-- cranberrygame start: line -->";
-	html += "<tr>";
-	html += "<td style='width: 10%; min-width: 20px;'>";
-	html += "<span>";
-	html += "<span>";
-	html += "Rank";
-	html += "</span>";
-	html += "</span>";
-	html += "</td>";
-	html += "<td style='width: 65%;'>";
-	html += "<div>";
-	html += "Name"
-	html += "</div>";
-	html += "</td>";
-	html += "<td style='width: 25%;'>";
-	html += "<div>";
-	html += "Score";
-	html += "</div>";
-	html += "</td>";
-	html += "</tr>";
-	html += "<!-- cranberrygame end -->";
-	for (var i = 0 ; i < ranks.length ; i++){
-		var rank = ranks[i];
-		var name = names[i];
-		var score = scores[i];
-		html += "<!-- cranberrygame start: line -->";
-		html += "<tr>";
-		html += "<td style='width: 10%; min-width: 20px;'>";
-		html += "<span>";
-		html += "<span>";
-		html += rank;
-		html += "</span>";
-		html += "</span>";
-		html += "</td>";
-		html += "<td style='width: 65%;'>";
-		html += "<div>";
-		html += name
-		html += "</div>";
-		html += "</td>";
-		html += "<td style='width: 25%;'>";
-		html += "<div>";
-		html += score;
-		html += "</div>";
-		html += "</td>";
-		html += "</tr>";
-		html += "<!-- cranberrygame end -->";
-	}
-	html += "</table>";
-	html += "</div>";
-	html += "</div>";
-	html += "<div id='modal_close'></div>";
-	$("#leaderboard").append(html);
-	var mOverlay = document.getElementById('modal_window');
-	var mClose = document.getElementById('modal_close');
-	var modal = document.getElementById('modal_holder');
-	var allNodes = document.querySelectorAll("*");
-	var modalOpen = false;
-	var lastFocus;
-	var i;
-	lastFocus = document.activeElement;
-	mOverlay.setAttribute('aria-hidden', 'false');
-	modalOpen = true;
-	modal.setAttribute('tabindex', '0');
-	modal.focus();
-	mClose.addEventListener('click', _HideLeaderboard);
-	mOverlay.addEventListener('click', function( e ) {
-		if (e.target == modal.parentNode) {
-			_HideLeaderboard()
-		}
-	}, false);
-	function focusRestrict ( event ) {
-		if ( modalOpen && !modal.contains( event.target ) ) {
-			event.stopPropagation();
-			modal.focus();
-		}
-	}
-	for (i = 0; i < allNodes.length; i++) {
-		allNodes.item(i).addEventListener('focus', focusRestrict);
-	}
-}
-function _HideLeaderboard() {
-	var myNode = document.getElementById('leaderboard');
-	var fc = myNode.firstChild;
-	while( fc ) {
-		myNode.removeChild( fc );
-		fc = myNode.firstChild;
-	}
-	isShowingLeaderboard = false;
-}
-	Acts.prototype.ShowLeaderboard = function ()
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['api']('/' + appId + '/scores', [],
-				function(result) {
-					console.log(JSON.stringify(result));
-/*
-{"data":[
-{
-"score":5, "user":{"id":"1401934583460016", "name":"Betty Amicjdfchchd Martinazzisky"}, "application": {"id":"1288298811490896", "name":"Avoid Bird"}
-},
-{
-"score":4, "user":{"id":"1401934581110022", "name":"Jack Agfgfgchchd Hdffinazzisky"}, "application": {"id":"1288298811490896", "name":"Avoid Bird"}
-}
-]}
-*/
-					var arr = result["data"];
-					if (!arr) {
-						console.error("Hi-scores request failed: " + result);
-						return;
-					}
-					var ranks = [];
-					var names = [];
-					var scores = [];
-					var n = 10;//
-					arr.sort(function(a, b) {
-						return b["score"] - a["score"];
-					});
-					var i = 0, len = Math.min(arr.length, n);
-					for ( ; i < len; i++) {
-						var rank = i + 1;
-						ranks.push(rank);
-						names.push(arr[i]["user"]["name"]);
-						scores.push(arr[i]["score"]);
-					}
-					leaderboard_html(ranks, names, scores);//
-					isShowingLeaderboard = true;
-					if (!result || result.error) {
-						console.error(result);
-					}
-					else {
-;
-					}
-				},
-				function (error) {
-					console.log(JSON.stringify(error));
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-				}
-			);
-		}
-		else {
-		}
-	};
-	Acts.prototype.HideLeaderboard = function ()
-	{
-		if (!isLogined)
-			return;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			_HideLeaderboard();
-		}
-		else {
-		}
-	}
-	Acts.prototype.RequestHighScore = function ()
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['api']('/me/scores', [],
-				function(result) {
-					console.log(JSON.stringify(result));
-	/*
-	{"data":[
-	{
-	"score":5, "user":{"id":"1401934583460016", "name":"Betty Amicjdfchchd Martinazzisky"}, "application": {"id":"1288298811490896", "name":"Avoid Bird"}
-	}
-	]}
-	*/
-					highScore = 0;
-					var arr = result["data"];
-					for (var i = 0; i < arr.length; i++)
-					{
-						if (arr[i]["score"] > highScore)
-							highScore = arr[i]["score"];
-					}
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnRequestHighScoreSucceeded, self);
-				},
-				function (error) {
-					console.log(JSON.stringify(error));
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnRequestHighScoreFailed, self);
-				}
-			);
-		}
-		else {
-			FB.api('/me/scores', 'GET', {}, function(result) {
-				highScore = 0;
-				var arr = result["data"];
-				for (var i = 0; i < arr.length; i++)
-				{
-					if (arr[i]["score"] > highScore)
-						highScore = arr[i]["score"];
-				}
-				self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnRequestHighScoreSucceeded, self);
-			});
-		}
-	};
-	Acts.prototype.Invite = function ()
-	{
-		if (!isLogined)
-			return;
-		var self = this;
-		if (this.runtime.isAndroid || this.runtime.isiOS) {
-			if (typeof facebookConnectPlugin == 'undefined')
-				return;
-			facebookConnectPlugin['showDialog']( { 'method': "apprequests", 'message': "Come on man, check out my app!." },
-				function (result) {
-					console.log(JSON.stringify(result));
-/*
-{
-"to": ["10200794491820809", "1439269706387371"],
-"request": "485126918304157"
-}
-*/
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnInviteSucceeded, self);
-				},
-				function (error) {
-					onsole.log(JSON.stringify(error))
-					if (typeof error == "string")
-						errorMessage = error;
-					else if (error["errorMessage"])
-						errorMessage = error["errorMessage"];
-					else
-						errorMessage = JSON.stringify(error);
-					self.runtime.trigger(cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnInviteFailed, self);
-				}
-			);
-		}
-		else {
-		}
-	};
-	pluginProto.acts = new Acts();
-	function Exps() {};
-/*
-	Exps.prototype.MyExpression = function (ret)	// 'ret' must always be the first parameter - always return the expression's result through it!
-	{
-		ret.set_int(1337);				// return our value
-	};
-	Exps.prototype.Text = function (ret, param) //cranberrygame
-	{
-		ret.set_string("Hello");		// for ef_return_string
-	};
-*/
-	Exps.prototype.UserId = function (ret)
-	{
-		ret.set_float(parseFloat(userId));
-	};
-	Exps.prototype.FullName = function (ret)
-	{
-		ret.set_string(fullName);
-	};
-	Exps.prototype.FirstName = function (ret)
-	{
-		ret.set_string(firstName);
-	};
-	Exps.prototype.LastName = function (ret)
-	{
-		ret.set_string(lastName);
-	};
-	Exps.prototype.Gender = function (ret)
-	{
-		ret.set_string(gender);
-	};
-	Exps.prototype.Email = function (ret)
-	{
-		ret.set_string(email);
-	};
-	Exps.prototype.AccessToken = function (ret)
-	{
-		ret.set_string(accessToken);
-	};
-	Exps.prototype.Score = function (ret)
-	{
-		ret.set_int(highScore);
-	};
-	Exps.prototype.ErrorMessage = function (ret)
-	{
-		ret.set_string(errorMessage);
-	};
-	pluginProto.exps = new Exps();
-}());
-;
-;
-/*
-cr.plugins_.cranberrygame_CordovaInAppBrowser = function(runtime)
-{
-	this.runtime = runtime;
-	Type
-		onCreate
-	Instance
-		onCreate
-		draw
-		drawGL
-	cnds
-	acts
-	exps
-};
-*/
-cr.plugins_.cranberrygame_CordovaInAppBrowser = function(runtime)
-{
-	this.runtime = runtime;
-};
-(function ()
-{
-	var pluginProto = cr.plugins_.cranberrygame_CordovaInAppBrowser.prototype;
-	pluginProto.Type = function(plugin)
-	{
-		this.plugin = plugin;
-		this.runtime = plugin.runtime;
-	};
-	var typeProto = pluginProto.Type.prototype;
-/*
-	var fbAppID = "";
-	var fbAppSecret = "";
-*/
-	typeProto.onCreate = function()
-	{
-/*
-		var newScriptTag=document.createElement('script');
-		newScriptTag.setAttribute("type","text/javascript");
-		newScriptTag.setAttribute("src", "mylib.js");
-		document.getElementsByTagName("head")[0].appendChild(newScriptTag);
-		var scripts=document.getElementsByTagName("script");
-		var scriptExist=false;
-		for(var i=0;i<scripts.length;i++){
-			if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
-				scriptExist=true;
-				break;
-			}
-		}
-		if(!scriptExist){
-			var newScriptTag=document.createElement("script");
-			newScriptTag.setAttribute("type","text/javascript");
-			newScriptTag.setAttribute("src", "cordova.js");
-			document.getElementsByTagName("head")[0].appendChild(newScriptTag);
-		}
-*/
-		if(this.runtime.isBlackberry10 || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81){
-			var scripts=document.getElementsByTagName("script");
-			var scriptExist=false;
-			for(var i=0;i<scripts.length;i++){
-				if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
-					scriptExist=true;
-					break;
-				}
-			}
-			if(!scriptExist){
-				var newScriptTag=document.createElement("script");
-				newScriptTag.setAttribute("type","text/javascript");
-				newScriptTag.setAttribute("src", "cordova.js");
-				document.getElementsByTagName("head")[0].appendChild(newScriptTag);
-			}
-		}
-	};
-	pluginProto.Instance = function(type)
-	{
-		this.type = type;
-		this.runtime = type.runtime;
-	};
-	var instanceProto = pluginProto.Instance.prototype;
-	instanceProto.onCreate = function()
-	{
-/*
-		this.arr = [];
-		this.forX = 0;
-		var self=this;
-		window.addEventListener("resize", function () {//cranberrygame
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaInAppBrowser.prototype.cnds.TriggerCondition, self);
-		});
-*/
-		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
-			return;
-	};
-	instanceProto.draw = function(ctx)
-	{
-	};
-	instanceProto.drawGL = function (glw)
-	{
-	};
-/*
-	instanceProto.at = function (x)
-	{
-		return this.arr[x];
-	};
-	instanceProto.set = function (x, val)
-	{
-		this.arr[x] = val;
-	};
-	instanceProto.doForEachTrigger = function (current_event)
-	{
-		this.runtime.pushCopySol(current_event.solModifiers);
-		current_event.retrigger();
-		this.runtime.popSol(current_event.solModifiers);
-	};
-*/
-	function Cnds() {};
-/*
-	Cnds.prototype.MyCondition = function (myparam)
-	{
-		return myparam >= 0;
-	};
-	Cnds.prototype.TriggerCondition = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.ArrForEach = function ()
-	{
-        var current_event = this.runtime.getCurrentEventStack().current_event;
-		this.forX = 0;
-		for (this.forX = 0; this.forX < this.arr.length; this.forX++)
-		{
-			this.doForEachTrigger(current_event);
-		}
-		this.forX = 0;
-		return false;
-	};
-*/
-	Cnds.prototype.OnLoadStart = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnLoadStop = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnLoadError = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnExit = function ()
-	{
-		return true;
-	};
-	pluginProto.cnds = new Cnds();
-	function Acts() {};
-/*
-	Acts.prototype.MyAction = function (myparam)
-	{
-		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
-			return;
-		if (this.runtime.isAndroid && navigator.platform == 'Win32')//crosswalk emulator
-			return;
-		alert(myparam);
-	};
-	Acts.prototype.TriggerAction = function ()
-	{
-		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
-			return;
-		if (this.runtime.isAndroid && navigator.platform == 'Win32')//crosswalk emulator
-			return;
-		var self=this;
-		self.runtime.trigger(cr.plugins_.cranberrygame_CordovaInAppBrowser.prototype.cnds.TriggerCondition, self);
-	};
-*/
-	function indexToTarget(i)
-	{
-		switch (i) {
-		case 0:		return "_self";
-		case 1:		return "_blank";
-		case 2:		return "_system";
-		}
-		return "_blank";
-	};
-	Acts.prototype.Open = function (URL, target, locationBar)
-	{
-		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
-			return;
-		var locationBarStr = 'location=no';
-		if (locationBar == 1)
-			locationBarStr = "location=yes";
-		this.ref = window['open'](URL, indexToTarget(target), locationBarStr);
-		var self = this;
-		this.ref.addEventListener('loadstart', function(event) {
-			self.url = event['url'];
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaInAppBrowser.prototype.cnds.OnLoadStart, self);
-		});
-		this.ref.addEventListener('loadstop', function(event) {
-			self.url = event['url'];
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaInAppBrowser.prototype.cnds.OnLoadStop, self);
-		});
-		this.ref.addEventListener('loaderror', function(event) {
-			self.url = event['url'];
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaInAppBrowser.prototype.cnds.OnLoadError, self);
-		});
-		this.ref.addEventListener('exit', function(event) {
-			self.url = event['url'];
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaInAppBrowser.prototype.cnds.OnExit, self);
-		});
-	};
-	Acts.prototype.Show = function ()
-	{
-		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
-			return;
-		this.ref['show']();
-	};
-	Acts.prototype.Close = function ()
-	{
-		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
-			return;
-		this.ref['close']();
-	};
-	Acts.prototype.ExecuteScript = function (scriptFile)
-	{
-		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
-			return;
-		this.ref['executeScript']({'file': scriptFile});
-	};
-	Acts.prototype.InsertCSS = function (cssFile)
-	{
-		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
-			return;
-		this.ref['insertCSS']({'file': cssFile});
-	};
-	pluginProto.acts = new Acts();
-	function Exps() {};
-/*
-	Exps.prototype.CellXCount = function (ret)	// 'ret' must always be the first parameter - always return the expression's result through it!
-	{
-		ret.set_int(1337);				// return our value
-	};
-	Exps.prototype.Text = function (ret, param) //cranberrygame
-	{
-		ret.set_string("Hello");		// for ef_return_string
-	};
-	Exps.prototype.CurValue = function (ret)
-	{
-		ret.set_any(this.at(this.forX));
-	};
-	Exps.prototype.At = function (ret, x_)
-	{
-		ret.set_any(this.at(x));
-	};
-	Exps.prototype.Width = function (ret)
-	{
-		ret.set_int(this.cx);
-	};
-*/
-	Exps.prototype.URL = function (ret)	// 'ret' must always be the first parameter - always return the expression's result through it!
-	{
-		ret.set_string(this.url);		// for ef_return_string
-	};
-	pluginProto.exps = new Exps();
-}());
-;
-;
 cr.behaviors.Rotate = function(runtime)
 {
 	this.runtime = runtime;
@@ -20548,19 +19326,18 @@ cr.behaviors.Rotate = function(runtime)
 }());
 cr.getObjectRefTable = function () { return [
 	cr.plugins_.Browser,
+	cr.plugins_.CordovaFaceCon,
+	cr.plugins_.Sprite,
 	cr.plugins_.Text,
 	cr.plugins_.Touch,
-	cr.plugins_.cranberrygame_CordovaFacebook,
-	cr.plugins_.cranberrygame_CordovaInAppBrowser,
-	cr.plugins_.Sprite,
 	cr.behaviors.Rotate,
 	cr.plugins_.Touch.prototype.cnds.OnTouchObject,
 	cr.plugins_.Text.prototype.acts.SetText,
-	cr.plugins_.cranberrygame_CordovaFacebook.prototype.acts.Login,
-	cr.plugins_.cranberrygame_CordovaFacebook.prototype.cnds.OnLoginSucceeded,
+	cr.plugins_.CordovaFaceCon.prototype.acts.login,
+	cr.plugins_.CordovaFaceCon.prototype.cnds.onLoginSucc,
 	cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
 	cr.plugins_.Sprite.prototype.acts.LoadURL,
-	cr.plugins_.cranberrygame_CordovaFacebook.prototype.exps.UserId,
+	cr.plugins_.CordovaFaceCon.prototype.exps.getUserId,
 	cr.system_object.prototype.cnds.Every,
-	cr.plugins_.cranberrygame_CordovaFacebook.prototype.exps.FullName
+	cr.plugins_.CordovaFaceCon.prototype.exps.getAccessToken
 ];};
