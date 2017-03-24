@@ -19335,9 +19335,11 @@ cr.getObjectRefTable = function () { return [
 	cr.plugins_.Text.prototype.acts.SetText,
 	cr.plugins_.CordovaFaceCon.prototype.acts.login,
 	cr.plugins_.CordovaFaceCon.prototype.cnds.onLoginSucc,
+	cr.system_object.prototype.cnds.Every,
+	cr.plugins_.CordovaFaceCon.prototype.acts.getLoginStatus,
+	cr.plugins_.CordovaFaceCon.prototype.cnds.onGetLogStatSucc,
+	cr.plugins_.CordovaFaceCon.prototype.exps.getAccessToken,
 	cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
 	cr.plugins_.Sprite.prototype.acts.LoadURL,
-	cr.plugins_.CordovaFaceCon.prototype.exps.getUserId,
-	cr.system_object.prototype.cnds.Every,
-	cr.plugins_.CordovaFaceCon.prototype.exps.getAccessToken
+	cr.plugins_.CordovaFaceCon.prototype.exps.getUserId
 ];};
