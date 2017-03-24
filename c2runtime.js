@@ -20626,8 +20626,5 @@ cr.getObjectRefTable = function () { return [
 	cr.plugins_.CordovaFaceCon.prototype.exps.getUserId,
 	cr.plugins_.Rex_Firebase_Authentication.prototype.acts.AuthWithOAuthToken_FB,
 	cr.plugins_.CordovaFaceCon.prototype.exps.getAccessToken,
-	cr.system_object.prototype.cnds.Every,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.DisplayName,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.UserID,
-	cr.plugins_.Rex_Firebase_Authentication.prototype.exps.Email
+	cr.system_object.prototype.cnds.Every
 ];};
